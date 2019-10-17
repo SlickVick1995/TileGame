@@ -1,6 +1,11 @@
 package dev.techknowcoder.tilegame;
 
 import dev.techknowcoder.display.Display;
+import dev.techknowcoder.tilegame.gfx.ImageLoader;
+
+import java.awt.*;
+import java.awt.image.BufferStrategy;
+import java.awt.image.BufferedImage;
 
 public class Game implements Runnable
 {
@@ -12,6 +17,11 @@ public class Game implements Runnable
     private boolean running = false;
     private Thread thread;
 
+    private BufferStrategy bs;
+    private Graphics g;
+
+    private BufferedImage testImage;
+
     public Game(String title, int width, int height)
     {
         this.width = width;
@@ -20,14 +30,28 @@ public class Game implements Runnable
     }
 
     private void init() {
+
         display = new Display(title, width, height);
+        testImage = ImageLoader.loadImage("/textures/test.png");
     }
 
     private void tick(){
 
     }
     private void render(){
-
+        bs = display.getCanvas().getBufferStrategy();
+        if(bs == null) {
+            display.getCanvas().createBufferStrategy(3);
+            return;
+        }
+        g = bs.getDrawGraphics();
+//        Clear screen
+        g.clearRect(0, 0, width, height);
+//        Draw here!
+        g.drawImage(testImage, 20, 20, null);
+//        End drawing!
+        bs.show();;
+        g.dispose();
     }
     public void run()
     {
