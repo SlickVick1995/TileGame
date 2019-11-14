@@ -20,7 +20,7 @@ public class Game implements Runnable
     }
 
     private void init() {
-        display = new Display(title, width, height);
+    	display = new Display(title, width, height);
     }
 
     private void tick(){
