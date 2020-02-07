@@ -1,5 +1,5 @@
 package dev.techknowcoder.tilegame;
-import dev.techknowcoder.display.Display;
+import dev.techknowcoder.tilegame.Game;
 
 public class Launcher
 {
