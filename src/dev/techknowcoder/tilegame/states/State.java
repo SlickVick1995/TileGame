@@ -1,6 +1,6 @@
 package dev.techknowcoder.tilegame.states;
 
-import dev.techknowcoder.tilegame.Game;
+import dev.techknowcoder.tilegame.Handler;
 
 import java.awt.Graphics;
 
@@ -8,8 +8,9 @@ public abstract class State {
 
     private static State currentState = null;
 
-    public State(Game game) {
-
+    protected Handler handler;
+    public State(Handler handler) {
+        this.handler = handler;
     }
 
     public static void setState(State state) {

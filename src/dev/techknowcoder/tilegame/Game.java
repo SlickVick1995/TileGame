@@ -2,6 +2,7 @@ package dev.techknowcoder.tilegame;
 
 import dev.techknowcoder.tilegame.gfx.Assets;
 import dev.techknowcoder.display.Display;
+import dev.techknowcoder.tilegame.gfx.GameCamera;
 import dev.techknowcoder.tilegame.input.KeyManager;
 import dev.techknowcoder.tilegame.states.GameState;
 import dev.techknowcoder.tilegame.states.MenuState;
@@ -13,7 +14,7 @@ public class Game implements Runnable
 {
     private Display display;
 
-    public int width, height;
+    private int width, height;
     public String title;
 
     private boolean running = false;
@@ -28,6 +29,12 @@ public class Game implements Runnable
 //    Input
     private KeyManager keyManager;
 
+//    Camera
+    private GameCamera gameCamera;
+
+//    Handler
+    private Handler handler;
+
     public Game(String title, int width, int height)
     {
         this.width = width;
@@ -40,8 +47,12 @@ public class Game implements Runnable
     	display = new Display(title, width, height);
     	display.getFrame().addKeyListener(keyManager);
 		Assets.init();
-		gameState = new GameState(this);
-		menuState = new MenuState(this);
+
+		gameCamera = new GameCamera(this,0, 0);
+		handler = new Handler(this);
+
+		gameState = new GameState(handler);
+		menuState = new MenuState(handler);
 		State.setState(gameState);
     }
 
@@ -106,6 +117,17 @@ public class Game implements Runnable
         return keyManager;
     }
 
+    public GameCamera getGameCamera(){
+        return gameCamera;
+    }
+
+    public int getWidth(){
+        return width;
+    }
+
+    public int getHeight(){
+        return height;
+    }
 
     public synchronized void start()
     {

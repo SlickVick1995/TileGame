@@ -1,12 +1,17 @@
 package dev.techknowcoder.tilegame.entities;
 
+import dev.techknowcoder.tilegame.Game;
+import dev.techknowcoder.tilegame.Handler;
+
 import java.awt.Graphics;
 public abstract class Entity {
 
+    protected Handler handler;
     protected float x, y;
     protected int width, height;
 
-    public Entity(float x, float y, int width, int height){
+    public Entity(Handler handler, float x, float y, int width, int height){
+        this.handler = handler;
         this.x = x;
         this.y = y;
         this.height = height;
