@@ -1,6 +1,9 @@
 package dev.techknowcoder.worlds;
 
 import dev.techknowcoder.tilegame.Handler;
+import dev.techknowcoder.tilegame.entities.EntityManager;
+import dev.techknowcoder.tilegame.entities.creatures.Player;
+import dev.techknowcoder.tilegame.entities.statics.Tree;
 import dev.techknowcoder.tiles.Tile;
 import dev.techknowcoder.utils.Utils;
 
@@ -13,13 +16,23 @@ public class World {
     private int spawnX, spawnY;
     private int [][] tiles;
 
+//    Entities
+    private EntityManager entityManager;
+
     public World(Handler handler, String path){
         this.handler = handler;
+        entityManager = new EntityManager(handler, new Player(handler,100, 100));
+        entityManager.addEntity(new Tree(handler, 100, 250));
+        entityManager.addEntity(new Tree(handler, 100, 350));
+        entityManager.addEntity(new Tree(handler, 100, 450));
         loadWorld(path);
+        entityManager.getPlayer().setX(spawnX);
+        entityManager.getPlayer().setY(spawnY);
+
     }
 
     public void tick(){
-
+        entityManager.tick();
     }
 
     public void render(Graphics g){
@@ -36,9 +49,18 @@ public class World {
 
             }
         }
+//        Entities
+        entityManager.render(g);
+    }
+
+    public EntityManager getEntityManager() {
+        return entityManager;
     }
 
     public Tile getTile(int x, int y){
+        if(x < 0 || y < 0 || x >= width || y >= height)
+            return Tile.grassTile;
+
         Tile t = Tile.tiles[tiles[x][y]];
         if(t == null)
             return Tile.dirtTile;

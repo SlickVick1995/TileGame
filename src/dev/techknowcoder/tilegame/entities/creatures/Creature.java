@@ -1,6 +1,8 @@
 package dev.techknowcoder.tilegame.entities.creatures;
 import dev.techknowcoder.tilegame.Handler;
 import dev.techknowcoder.tilegame.entities.Entity;
+import dev.techknowcoder.tiles.Tile;
+
 public abstract class Creature extends Entity {
 
     public static final int DEFAULT_HEALTH = 10;
@@ -19,10 +21,46 @@ public abstract class Creature extends Entity {
     }
 
     public void move(){
-        x += xMove;
+        if(!checkEntityCollisions(xMove, 0f))
+            moveX();
+        if(!checkEntityCollisions(0f, yMove))
+            moveY();
+    }
+
+    public void moveX(){
+        if(xMove > 0){ // Moving right
+
+        int tx = (int)(x + xMove + bounds.x + bounds.width) / Tile.TILEWIDTH;
+
+        if(!collisionWithTile(tx,(int) (y + bounds.y) / Tile.TILEHEIGHT) &&
+            !collisionWithTile(tx, (int) (y + bounds.y + bounds.height) / Tile.TILEHEIGHT)){
+            x += xMove;
+        }
+
+        } else if(xMove < 0) { // Moving left
+            int tx = (int)(x + xMove + bounds.x + bounds.width) / Tile.TILEWIDTH;
+            if(!collisionWithTile(tx,(int) (y + bounds.y) / Tile.TILEHEIGHT) &&
+                    !collisionWithTile(tx, (int) (y + bounds.y + bounds.height) / Tile.TILEHEIGHT)){
+                x += xMove;
+            }
+        }
+    }
+
+    public void moveY(){
+        if(yMove < 0){
+            int ty = (int) (y + yMove + bounds.y) / Tile.TILEHEIGHT;
+
+            if(!collisionWithTile((int) (x + bounds.x) / Tile.TILEWIDTH, ty) &&
+                !collisionWithTile((int) (x + bounds.x) / Tile.TILEWIDTH, ty)){
+                y += yMove;
+            }
+        }
         y += yMove;
     }
 
+    protected boolean collisionWithTile(int x, int y){
+        return  handler.getWorld().getTile(x,y).isSolid();
+   }
 //  GETTERS SETTERS
     public float getxMove() {
         return xMove;
