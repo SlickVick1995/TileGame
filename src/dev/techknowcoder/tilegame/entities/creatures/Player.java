@@ -30,12 +30,15 @@ public class Player extends Creature {
 
     @Override
     public void tick() {
-//        Animations
-        animDown.tick();
-//        Movement
-        getInput();
-        move();
-        handler.getGameCamera().centerOnEntity(this);
+// 	//Animations
+		animDown.tick();
+		animUp.tick();
+		animRight.tick();
+		animLeft.tick();
+		//Movement
+		getInput();
+		move();
+		handler.getGameCamera().centerOnEntity(this);
     }
 
     private void getInput(){

@@ -5,14 +5,21 @@ import dev.techknowcoder.tilegame.entities.creatures.Player;
 
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.Comparator;
 
 public class EntityManager {
 
     private Handler handler;
     private Player player;
     private ArrayList<Entity> entities;
-
-
+    private Comparator<Entity> renderSorter = new Comparator<Entity>(){
+        @Override
+        public int compare(Entity a, Entity b) {
+            if(a.getY() + a.getHeight() < b.getY() + b.getHeight())
+                return -1;
+            return 1;
+        }
+    };
 
     public EntityManager(Handler handler, Player player){
         this.handler = handler;
@@ -22,32 +29,31 @@ public class EntityManager {
     }
 
     public void tick(){
-        for(int i = 0; i < entities.size();i++){
+        for(int i = 0;i < entities.size();i++){
             Entity e = entities.get(i);
             e.tick();
         }
-        player.tick();
+        entities.sort(renderSorter);
     }
 
     public void render(Graphics g){
         for(Entity e : entities){
             e.render(g);
         }
-        player.render(g);
     }
 
     public void addEntity(Entity e){
         entities.add(e);
     }
 
-//    GETTERS AND SETTERS
+    //GETTERS SETTERS
 
-    public ArrayList<Entity> getEntities() {
-        return entities;
+    public Handler getHandler() {
+        return handler;
     }
 
-    public void setEntities(ArrayList<Entity> entities) {
-        this.entities = entities;
+    public void setHandler(Handler handler) {
+        this.handler = handler;
     }
 
     public Player getPlayer() {
@@ -58,12 +64,12 @@ public class EntityManager {
         this.player = player;
     }
 
-    public Handler getHandler() {
-        return handler;
+    public ArrayList<Entity> getEntities() {
+        return entities;
     }
 
-    public void setHandler(Handler handler) {
-        this.handler = handler;
+    public void setEntities(ArrayList<Entity> entities) {
+        this.entities = entities;
     }
 
 
