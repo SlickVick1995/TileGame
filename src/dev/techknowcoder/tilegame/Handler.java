@@ -2,6 +2,7 @@ package dev.techknowcoder.tilegame;
 
 import dev.techknowcoder.tilegame.gfx.GameCamera;
 import dev.techknowcoder.tilegame.input.KeyManager;
+import dev.techknowcoder.tilegame.input.MouseManager;
 import dev.techknowcoder.worlds.World;
 
 public class Handler {
@@ -23,6 +24,10 @@ public class Handler {
 
     public KeyManager getKeyManager(){
         return game.getKeyManager();
+    }
+
+    public MouseManager getMouseManager(){
+        return game.getMouseManager();
     }
 
     public int getHeight(){

@@ -4,6 +4,7 @@ import dev.techknowcoder.tilegame.gfx.Assets;
 import dev.techknowcoder.display.Display;
 import dev.techknowcoder.tilegame.gfx.GameCamera;
 import dev.techknowcoder.tilegame.input.KeyManager;
+import dev.techknowcoder.tilegame.input.MouseManager;
 import dev.techknowcoder.tilegame.states.GameState;
 import dev.techknowcoder.tilegame.states.MenuState;
 import dev.techknowcoder.tilegame.states.State;
@@ -24,10 +25,11 @@ public class Game implements Runnable
 	private Graphics g;
 
 //    States
-    private State gameState;
-    private State menuState;
+    public State gameState;
+    public State menuState;
 //    Input
     private KeyManager keyManager;
+    private MouseManager mouseManager;
 
 //    Camera
     private GameCamera gameCamera;
@@ -41,11 +43,16 @@ public class Game implements Runnable
         this.height = height;
         this.title = title;
         keyManager = new KeyManager();
+        mouseManager = new MouseManager();
     }
 
     private void init() {
     	display = new Display(title, width, height);
     	display.getFrame().addKeyListener(keyManager);
+    	display.getFrame().addMouseListener(mouseManager);
+    	display.getFrame().addMouseMotionListener(mouseManager);
+        display.getCanvas().addMouseListener(mouseManager);
+        display.getCanvas().addMouseMotionListener(mouseManager);
 		Assets.init();
 
 		gameCamera = new GameCamera(this,0, 0);
@@ -53,7 +60,7 @@ public class Game implements Runnable
 
 		gameState = new GameState(handler);
 		menuState = new MenuState(handler);
-		State.setState(gameState);
+		State.setState(menuState);
     }
 
 
@@ -115,6 +122,10 @@ public class Game implements Runnable
 
     public KeyManager getKeyManager(){
         return keyManager;
+    }
+
+    public MouseManager getMouseManager() {
+        return mouseManager;
     }
 
     public GameCamera getGameCamera(){
