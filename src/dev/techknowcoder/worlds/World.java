@@ -3,26 +3,30 @@ package dev.techknowcoder.worlds;
 import dev.techknowcoder.tilegame.Handler;
 import dev.techknowcoder.tilegame.entities.EntityManager;
 import dev.techknowcoder.tilegame.entities.creatures.Player;
+import dev.techknowcoder.tilegame.entities.statics.Rock;
 import dev.techknowcoder.tilegame.entities.statics.Tree;
+import dev.techknowcoder.tilegame.items.ItemManager;
 import dev.techknowcoder.tiles.Tile;
 import dev.techknowcoder.utils.Utils;
 
 import java.awt.*;
 
 public class World {
-
     private Handler handler;
     private int width, height;
     private int spawnX, spawnY;
     private int[][] tiles;
     //Entities
     private EntityManager entityManager;
-
+//    Item
+    private ItemManager itemManager;
     public World(Handler handler, String path){
         this.handler = handler;
         entityManager = new EntityManager(handler, new Player(handler, 100, 100));
+        itemManager = new ItemManager(handler);
         // Temporary entity code!
         entityManager.addEntity(new Tree(handler, 100, 250));
+        entityManager.addEntity(new Rock(handler, 100, 450));
 
         loadWorld(path);
 
@@ -31,6 +35,7 @@ public class World {
     }
 
     public void tick(){
+        itemManager.tick();
         entityManager.tick();
     }
 
@@ -46,6 +51,8 @@ public class World {
                         (int) (y * Tile.TILEHEIGHT - handler.getGameCamera().getyOffset()));
             }
         }
+//        Items
+        itemManager.render(g);
         //Entities
         entityManager.render(g);
     }
@@ -86,5 +93,13 @@ public class World {
 
     public EntityManager getEntityManager() {
         return entityManager;
+    }
+
+    public ItemManager getItemManager() {
+        return itemManager;
+    }
+
+    public void setItemManager(ItemManager itemManager) {
+        this.itemManager = itemManager;
     }
 }

@@ -13,32 +13,32 @@ import java.awt.*;
 import java.awt.image.BufferStrategy;
 public class Game implements Runnable
 {
-    private Display display;
 
+    private Display display;
     private int width, height;
     public String title;
 
     private boolean running = false;
     private Thread thread;
 
-	private BufferStrategy bs;
-	private Graphics g;
+    private BufferStrategy bs;
+    private Graphics g;
 
-//    States
+    //States
     public State gameState;
     public State menuState;
-//    Input
+
+    //Input
     private KeyManager keyManager;
     private MouseManager mouseManager;
 
-//    Camera
+    //Camera
     private GameCamera gameCamera;
 
-//    Handler
+    //Handler
     private Handler handler;
 
-    public Game(String title, int width, int height)
-    {
+    public Game(String title, int width, int height){
         this.width = width;
         this.height = height;
         this.title = title;
@@ -46,23 +46,22 @@ public class Game implements Runnable
         mouseManager = new MouseManager();
     }
 
-    private void init() {
-    	display = new Display(title, width, height);
-    	display.getFrame().addKeyListener(keyManager);
-    	display.getFrame().addMouseListener(mouseManager);
-    	display.getFrame().addMouseMotionListener(mouseManager);
+    private void init(){
+        display = new Display(title, width, height);
+        display.getFrame().addKeyListener(keyManager);
+        display.getFrame().addMouseListener(mouseManager);
+        display.getFrame().addMouseMotionListener(mouseManager);
         display.getCanvas().addMouseListener(mouseManager);
         display.getCanvas().addMouseMotionListener(mouseManager);
-		Assets.init();
+        Assets.init();
 
-		gameCamera = new GameCamera(this,0, 0);
-		handler = new Handler(this);
+        handler = new Handler(this);
+        gameCamera = new GameCamera(handler, 0, 0);
 
-		gameState = new GameState(handler);
-		menuState = new MenuState(handler);
-		State.setState(menuState);
+        gameState = new GameState(handler);
+        menuState = new MenuState(handler);
+        State.setState(menuState);
     }
-
 
     private void tick(){
         keyManager.tick();
@@ -70,24 +69,28 @@ public class Game implements Runnable
         if(State.getState() != null)
             State.getState().tick();
     }
+
     private void render(){
-		bs = display.getCanvas().getBufferStrategy();
-		if(bs == null){
-			display.getCanvas().createBufferStrategy(3);
-			return;
-		}
+        bs = display.getCanvas().getBufferStrategy();
+        if(bs == null){
+            display.getCanvas().createBufferStrategy(3);
+            return;
+        }
+        g = bs.getDrawGraphics();
+        //Clear Screen
+        g.clearRect(0, 0, width, height);
+        //Draw Here!
 
-		g = bs.getDrawGraphics();
-
-		g.clearRect(0,0, width, height);
-		//Draw Here!
         if(State.getState() != null)
             State.getState().render(g);
-		//End Drawing!
-		bs.show();
-		g.dispose();
+
+        //End Drawing!
+        bs.show();
+        g.dispose();
     }
-    public void run() {
+
+    public void run(){
+
         init();
 
         int fps = 60;
@@ -98,33 +101,35 @@ public class Game implements Runnable
         long timer = 0;
         int ticks = 0;
 
-        while (running) {
+        while(running){
             now = System.nanoTime();
             delta += (now - lastTime) / timePerTick;
             timer += now - lastTime;
             lastTime = now;
 
-            if (delta >= 1) {
+            if(delta >= 1){
                 tick();
                 render();
                 ticks++;
                 delta--;
             }
-            if (timer >= 1000000000)
-            {
+
+            if(timer >= 1000000000){
                 System.out.println("Ticks and Frames: " + ticks);
                 ticks = 0;
                 timer = 0;
             }
         }
+
         stop();
+
     }
 
     public KeyManager getKeyManager(){
         return keyManager;
     }
 
-    public MouseManager getMouseManager() {
+    public MouseManager getMouseManager(){
         return mouseManager;
     }
 
@@ -140,8 +145,7 @@ public class Game implements Runnable
         return height;
     }
 
-    public synchronized void start()
-    {
+    public synchronized void start(){
         if(running)
             return;
         running = true;
@@ -149,14 +153,13 @@ public class Game implements Runnable
         thread.start();
     }
 
-    public synchronized void stop()
-    {
+    public synchronized void stop(){
         if(!running)
             return;
         running = false;
         try {
             thread.join();
-        } catch(InterruptedException e) {
+        } catch (InterruptedException e) {
             e.printStackTrace();
         }
     }

@@ -1,5 +1,6 @@
 package dev.techknowcoder.tilegame;
 
+import dev.techknowcoder.tilegame.Game;
 import dev.techknowcoder.tilegame.gfx.GameCamera;
 import dev.techknowcoder.tilegame.input.KeyManager;
 import dev.techknowcoder.tilegame.input.MouseManager;

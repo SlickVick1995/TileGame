@@ -4,6 +4,7 @@ import java.awt.image.BufferedImage;
 
 public class Animation {
 
+
     private int speed, index;
     private long lastTime, timer;
     private BufferedImage[] frames;
@@ -19,6 +20,7 @@ public class Animation {
     public void tick(){
         timer += System.currentTimeMillis() - lastTime;
         lastTime = System.currentTimeMillis();
+
         if(timer > speed){
             index++;
             timer = 0;
@@ -30,4 +32,5 @@ public class Animation {
     public BufferedImage getCurrentFrame(){
         return frames[index];
     }
+
 }

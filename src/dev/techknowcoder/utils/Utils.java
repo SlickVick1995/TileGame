@@ -14,16 +14,19 @@ public class Utils {
             String line;
             while((line = br.readLine()) != null)
                 builder.append(line + "\n");
-        } catch(IOException e){
+
+            br.close();
+        }catch(IOException e){
             e.printStackTrace();
         }
+
         return builder.toString();
     }
 
     public static int parseInt(String number){
         try{
             return Integer.parseInt(number);
-        } catch(NumberFormatException e){
+        }catch(NumberFormatException e){
             e.printStackTrace();
             return 0;
         }

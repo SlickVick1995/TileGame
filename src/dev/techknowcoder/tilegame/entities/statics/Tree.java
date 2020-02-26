@@ -2,23 +2,35 @@ package dev.techknowcoder.tilegame.entities.statics;
 
 import dev.techknowcoder.tilegame.Handler;
 import dev.techknowcoder.tilegame.gfx.Assets;
+import dev.techknowcoder.tilegame.items.Item;
 import dev.techknowcoder.tiles.Tile;
+import dev.techknowcoder.tilegame.items.ItemManager;
 
 import java.awt.*;
 
 public class Tree extends StaticEntity {
 
-    public Tree(Handler handler, float x, float y){
-        super(handler, x, y, Tile.TILEWIDTH,Tile.TILEHEIGHT * 2);
+    public Tree(Handler handler, float x, float y) {
+        super(handler, x, y, Tile.TILEWIDTH, Tile.TILEHEIGHT * 2);
+
+        bounds.x = 10;
+        bounds.y = (int) (height / 1.5f);
+        bounds.width = width - 20;
+        bounds.height = (int) (height - height / 1.5f);
     }
 
     @Override
-    public void tick(){
+    public void tick() {
 
     }
 
     @Override
-    public void render(Graphics g){
-        g.drawImage(Assets.tree,(int) (x - handler.getGameCamera().getxOffset()), (int) (y - handler.getGameCamera().getyOffset()), width, height, null);
+    public void die(){
+        handler.getWorld().getItemManager().addItem(Item.rockItem.createNew((int) x, (int) y));
+    }
+
+    @Override
+    public void render(Graphics g) {
+        g.drawImage(Assets.tree, (int) (x - handler.getGameCamera().getxOffset()), (int) (y - handler.getGameCamera().getyOffset()), width, height, null);
     }
 }

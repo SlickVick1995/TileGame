@@ -4,9 +4,6 @@ import java.awt.Graphics;
 
 
 import dev.techknowcoder.tilegame.Handler;
-import dev.techknowcoder.tilegame.entities.creatures.Player;
-import dev.techknowcoder.tilegame.entities.statics.Tree;
-import dev.techknowcoder.tiles.Tile;
 import dev.techknowcoder.worlds.World;
 
 public class GameState extends State {
